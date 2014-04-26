@@ -1,0 +1,5 @@
+var LISTE_STATE={
+	"CREATING" : "CREATING",
+	"BUYING" : "BUYING",
+	"DONE" : "DONE"
+};
