@@ -3,10 +3,22 @@ var config={
 
 	database:{
 		name: "ListeDeCourses",
-		version: "1.0",
-		size: 5,
 		initializeDataOnCreation: true
 	},
+	
+	/*
+	* Les paramètres sont enregistrés automatiquement dans l'application
+	* name : nom du param (string)
+	* value : valeur du param (string)
+	* isTemporary : défini si les données sont supprimées à la fermeture de l'application (boolean optional)
+	*
+	*	ex: {"name" : "lang", "value" : "fr", "isTemporary" : false},
+	*
+	*/
+	parameters :[
+		{"name" : "lang", "value" : "fr"},
+		{"name" : "user_name", "value" : "Nicolas", "isTemporary" : true},
+	]
 	
 	initialData:{
 		"category":[

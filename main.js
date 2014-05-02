@@ -6,11 +6,11 @@ $(document).ready(function(){
 		}
 	});
 	
-	$("body").bind('DOMNodeInserted DOMNodeRemoved', function(event) {fitToScreen();});
-	$(window).resize(function(){fitToScreen();});
-	fitToScreen();
+	//$("body").bind('DOMNodeInserted DOMNodeRemoved', function(event) {fitToScreen();});
+	//$(window).resize(function(){fitToScreen();});
+	//fitToScreen();
 });
-
+/*
 function fitToScreen(){
 	var height = $(document).height();
 	$("header,.header").each(function(){
@@ -21,3 +21,4 @@ function fitToScreen(){
 	});
 	$("#content").height(height);
 }
+*/

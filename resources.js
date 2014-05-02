@@ -2,14 +2,18 @@ var loader=new function(){
 	var baseUrl="";
 	var scripts=[
 		"config",
-		"app/core/logger",
-		
+	
 		/* enums */
 		"app/enums/unite",
 		"app/enums/list_state",
 		
 		/* initialisation de l'application*/
+		"app/core/logger",
 		"app/core/application",
+		"app/core/webSql",
+		"app/core/indexedDB",
+		"app/core/database",
+		"app/core/parameters",
 		
 		/* déclaration des models*/
 		"app/models/product",
@@ -23,9 +27,6 @@ var loader=new function(){
 		
 		
 		/* déclaration des controllers*/
-		
-		/* application */
-		"app/core/database",
 
 		/* main */
 		"main"

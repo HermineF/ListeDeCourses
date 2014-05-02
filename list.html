@@ -1,28 +1,37 @@
 <!doctype html>
 <html>
 	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title></title>
-		<meta name="description" content="">
-		<meta name="viewport" content="width=device-width">
-		<link rel="stylesheet" href="styles/main.css">
-		<script src="bower_components/modernizr/modernizr.js"></script>
-		<script src="bower_components/jquery/jquery.js"></script>
-		<script src="scripts/loader.js"></script>
-		<link rel="stylesheet" href="styles/vendor/foundation/stylesheets/foundation-min.css">
+		<title>Test</title>
+		<link href="./styles/main.css" rel="stylesheet" />
+		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script src="display.js"></script>
+		<meta charset="UTF-8">
 	</head>
 	<body>
-		<header class="header">
-			<div class="pageName">Listes</div>
-			<div class="actions">
-				<div class="button add"></div>
-				<div class="button remove"></div>
-				<div class="button edit"></div>
+		<header>
+			<div class="row">
+				<h1>Listes</h1>
+				<div class="actions">
+					<div class="button add"></div>
+					<div class="button remove"></div>
+					<div class="button edit"></div>
+				</div>
 			</div>
 		</header>
-		<section id="content">
+		<main id="content">
 			<ul class="lists">
+				<li>
+					<div class="state CREATING"></div>
+					<div class="name">Nom de la liste</div>
+				</li>
+				<li class="selected">
+					<div class="state BUYING"></div>
+					<div class="name">Nom de la liste</div>
+				</li>
+				<li>
+					<div class="state DONE"></div>
+					<div class="name">Nom de la liste</div>
+				</li>
 				<li>
 					<div class="state CREATING"></div>
 					<div class="name">Nom de la liste</div>
@@ -32,13 +41,52 @@
 					<div class="name">Nom de la liste</div>
 				</li>
 				<li>
+					<div class="state CREATING"></div>
+					<div class="name">Nom de la liste</div>
+				</li>
+				<li class="selected">
+					<div class="state BUYING"></div>
+					<div class="name">Nom de la liste</div>
+				</li>
+				<li>
 					<div class="state DONE"></div>
 					<div class="name">Nom de la liste</div>
 				</li>
+				<li>
+					<div class="state CREATING"></div>
+					<div class="name">Nom de la liste</div>
+				</li>
+				<li>
+					<div class="state BUYING"></div>
+					<div class="name">Nom de la liste</div>
+				</li>
+
+			</ul>
+		</main>
+		<footer class="error">
+			<div class=" button close"></div>
+			<p>Ca marche très bien!!!</p>
+			<div class="buttons">
+				<div class="button">Oui</div>
+				<div class="button">Non</div>
+				<div class="button">Je ne sais pas</div>
+			</div>
+		</footer>
+		<section id="parameters">
+			<div class="grab"></div>
+			<header>
+				<div class="row">
+					<div class="icon"></div>
+					<h1>Paramètres</h1>
+				</div>
+			</header>
+			<ul>
+				<li>Catégories</li>
+				<li>Produits</li>
+				<li>Agenda</li>
+				<li>Aide</li>
+				<li>Configuration</li>
 			</ul>
 		</section>
-		<footer class="footer info">
-			Hello World
-		</footer>
 	</body>
 </html>

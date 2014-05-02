@@ -1,10 +1,45 @@
 var Application = new function(){
-	var onReadyCallback;
-	this.onInitializationDone = function(){
-		if(typeof(onReadyCallback) === "function"){
-			onReadyCallback();
+	var initialisationState = "TO_START";
+	var initSteps=[
+		"DataBase",
+		"Parameters"
+	];
+	var onReady = [];
+
+	this.init = function(){
+		initialisationState = "LOADING";
+		var initializedModules = 0;
+		for(var i = 0; i < initSteps.length; i++){
+			var step = initSteps[i];
+			if(Application[step] && typeof Application[step].init === "function"){
+				Application[step].init(function(){
+					initializedModules++;
+					if(initializedModules === initSteps.length){
+						initialisationState = "FINISHED";
+						for(var i in onReady){
+							var callback = onReady[i];
+							if(typeof callback === "function"){
+								callback();
+							}
+						}
+					}							
+				});
+			}
 		}
 	};
+	
+	this.ready = function(callback){
+		if(initialisationState !== "FINISHED"){
+			onReady.push(callback);
+			
+			if(initialisationState === "TO_START"){
+				Application.init();
+			}
+			
+		}else if(typeof callback === "function"){
+			callback();
+		}
+	}
 	
 	this.Types={
 		"string":{
@@ -35,7 +70,7 @@ var Application = new function(){
 			if(typeof(_models[name]) === "undefined"){
 				_models[name] = config;
 			}else{
-				Logger.error("Le model "+name+" a déjà été défini",_models[name]);
+				console.error("Le model "+name+" a déjà été défini",_models[name]);
 			}
 		}
 		this.getModel = function(name){
@@ -52,9 +87,4 @@ var Application = new function(){
 			
 		};
 	};
-
-	this.ready = function(callback){
-		onReadyCallback = callback;
-	};
-	
 };

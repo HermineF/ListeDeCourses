@@ -1,11 +1,29 @@
-$theme_color: #31a01b;
-$text_color: #333;
-$background_color:#fafafa;
+@font-face {
+	font-family: 'captain-icon';
+	src:url('./fonts/captain-icon.eot?ndeh1k');
+	src:url('./fonts/captain-icon.eot?#iefixndeh1k') format('embedded-opentype'),
+		url('./fonts/captain-icon.woff?ndeh1k') format('woff'),
+		url('./fonts/captain-icon.ttf?ndeh1k') format('truetype'),
+		url('./fonts/captain-icon.svg?ndeh1k#captain-icon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
 
-$orange:#ffbf00;
-$green:#69e218;
-$violet:#bc00b9;
-$white: #FFF;
+$listHeight : 60px;
+$shadow:rgba(0,0,0,0.2);
+$reflect:rgba(255,255,255,0.2);
+
+$theme_color: #31a01b;
+$dark_text_color: #333;
+$light_text_color:#FFFFFF;
+$background_color:#fafafa;
+$selected_bg: #FFA040;
+$loader_color:#FFF;
+$parameters_bg:#6b6b6b;
+
+$orange:#FFC500;
+$green:#00A287;
+$violet:#BC008D;
 
 $info_color:#66cbff;
 $warn_color:#ffd400;
@@ -25,17 +43,6 @@ $theme_color_dark : darken($theme_color,15%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color1', endColorstr='$color2',GradientType=0 );
 }
 
-
-html,body {
-    background: $background_color;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: $text_color;
-	width:100%;
-	height:100%;
-	overflow:hidden;
-	display:block;
-}
-
 .initial_loader{
 	@include gradient($theme_color,$theme_color_dark);
 
@@ -51,7 +58,7 @@ html,body {
 		color:$theme_color_dark;
 		font-weight:bold;
 		font-size:3em;
-		text-shadow: -1px -1px 0px $white, 1px 1px 0px $white, 1px -1px 0px $white, -1px 1px 0px $white;
+		text-shadow: -1px -1px 0px $loader_color, 1px 1px 0px $loader_color, 1px -1px 0px $loader_color, -1px 1px 0px $loader_color;
 	}
 	
 	.box{
@@ -74,7 +81,7 @@ html,body {
 		.circle{
 			width:40px;
 			height:40px;
-			background:$white;
+			background:$loader_color;
 			display:block;
 			border-radius:50%;
 			position:absolute;
@@ -166,86 +173,332 @@ html,body {
 }
 
 
+/* INIT */
+*{
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+
+html, body {
+	height: 100%;
+	width: 100%;
+}
+
+body {
+	height: 100%;
+    width: 100%;
+	display: flex;
+    flex-direction: column;
+	
+    background: $background_color;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size:20px;
+    color: $dark_text_color;
+}
+
+.row{
+	display: flex;
+    flex-direction: row;
+	justify-content: space-between;
+	align-items:center;
+}
+
+li{
+	display: flex;
+    flex-direction: row;
+	align-items:stretch;
+}
+
+button,.button{
+	display: inline-block;
+	border:none;
+	background:transparent;
+	border-radius:3px;
+	font-family: 'captain-icon';
+	font-size:30px;
+	font-style: normal;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+	position:relative;
+	height:40px;
+
+	&:active{
+		box-shadow: inset 0 10px 10px rgba(0,0,0,0.3);
+	}
+	
+	&::before{
+		position:absolute;
+		top:5px;
+		left:5px;
+	}
+	
+	&.edit::before{
+		content: "\e635";
+	}
+	&.add::before{
+		content: "\e63a";
+	}
+	&.remove::before{
+		content: "\e61d";
+	}
+}
+
+h1{
+	margin:0 10px;
+}
+
+ul{
+	li{
+		height:$listHeight;
+		overflow:hidden;
+		position:relative;
+		
+		&::before, &::after{
+			content:"";
+			display:block;
+			position:absolute;
+			height:1px;
+			left:0;
+			width:100%;
+		}
+		&::before{
+			top:0;
+			background:$reflect;
+		}
+		&::after{
+			bottom: 0;
+			background:$shadow;
+		}
+	}
+}
+
 /* HEADERS*/
 header,.header{
-	@include gradient($theme_color,$theme_color_dark);
-	display:block;
-	height:40px;
-	width:100%;
-	color: $white;
-	position:relative;
+	background:$theme_color;
+	height:50px;
+	color: $light_text_color;
 	
-	.pageName{
-		font-size:1.5em;
+	.pageName, h1{
+		font-size:35px;
 		font-weight:bold;
 		padding:5px 10px;
 	}
 	.actions{
-		position:absolute;
-		top:0px;
-		right:0px;
-		padding: 0 5px;
-		
 		.button{
-			width:40px;
-			height:40px;
-			display:inline-block;
-			background:transparent;
-			border-radius:5px;
+			width:38px;
+			height:38px;
 		}
 	}
 }
-/* footer */
+
+/* FOOTER */
 footer,.footer{
-	@include gradient($theme_color,$theme_color_dark);
-	display:block;
-	height:40px;
-	width:100%;
-	color: $white;
-	position:relative;
-	&.info{
-		@include gradient(lighten($info_color,5%),darken($info_color,5%));
+	background:$theme_color;
+	border: 1px solid $dark_text_color;
+	height:100px;
+	padding:10px 25px 10px 100px;
+	position: relative;
+	overflow-y: auto;
+	
+	.close{
+		position: absolute;
+		top:5px;
+		right:5px;
+		display:block;
+		width:20px;
+		height:20px;
+		font-size:15px;
+		line-height:10px;
+		border:1px solid $dark_text_color;
+		border-radius:50%;
+		
+		&::before{
+			content: "\e638";
+		}
 	}
-	&.warn{
-		@include gradient(lighten($warn_color,5%),darken($warn_color,5%));
+	
+	&.info{
+		background : $info_color;
+		
+		&::before{
+			position: absolute;
+			top: 35px;
+			left: 25px;
+			display: block;
+			width: 20px;
+			height: 20px;
+			font-size: 54px;
+			font-family: 'captain-icon';
+			content: "\e6c9";
+		}
+	}
+	&.warning{
+		background : $warn_color;
+		
+		&::before{
+			position: absolute;
+			top: 35px;
+			left: 25px;
+			display: block;
+			width: 20px;
+			height: 20px;
+			font-size: 54px;
+			font-family: 'captain-icon';
+			content: "\e63f";
+		}
 	}
 	&.error{
-		@include gradient(lighten($error_color,5%),darken($error_color,5%));
+		background : $error_color;
+		
+		&::before{
+			position: absolute;
+			top: 35px;
+			left: 25px;
+			display: block;
+			width: 20px;
+			height: 20px;
+			font-size: 54px;
+			font-family: 'captain-icon';
+			content: "\e683";
+		}
 	}
-
+	
+	.buttons{
+		width:100%;
+		text-align:right;
+		margin-top: 20px;
+		button,.button{
+			border: 1px solid $dark_text_color;
+			height:25px;
+			font-size:20px;
+						padding:5px;
+			margin:0 5px;
+		}
+	}
 }
 
-
 /* content*/
-#content{
+main,#content{
+	flex: auto;
+	-webkit-flex: 1 1 auto;
+    overflow-y: auto;
+    height: 0px;
+	
 	@include gradient(lighten($background_color,15%),darken($background_color,15%));
+	
 	.lists{
+		box-shadow: 0 5px 5px $shadow;
 		li{
-			height:40px;
-			overflow:hidden;
-			border-top: 1px solid lighten($background_color,15%);
-			border-bottom: 1px solid darken($background_color,15%);
 			
+			&.selected{
+				background: $selected_bg;
+			}
 			.state{
 				display:inline-block;
-				height:40px;
-				width:40px;
+				height:$listHeight;
+				width:$listHeight;
+				font-family: 'captain-icon';
+				font-size:40px;
+				font-style: normal;
+				font-weight: normal;
+				-webkit-font-smoothing: antialiased;
+				position:relative;
+	
 				&.CREATING{
 					background: $green;
+				}
+				&.CREATING::before{
+					position:absolute;
+					top: 8px;
+					left: 14px;
+					content: "\e703";
 				}
 				&.BUYING{
 					background: $orange;
 				}
+				&.BUYING::before{
+					position:absolute;
+					top: 9px;
+					left: 4px;
+					content: "\e61f";
+				}
 				&.DONE{
 					background: $violet;
 				}
+				&.DONE::before{
+					position:absolute;
+					top: 7px;
+					left: 5px;
+					content: "\e63e";
+				}
 			}
 			.name{
-				display:inline-block;
-				height:40px;
-				line-height:1em;
+				line-height:$listHeight;
+				margin:0 15px;
 			}
 			
 		}
+	}
+}
+
+#parameters{
+	position:absolute;
+	top:0px;
+	left:-70%;
+	display: flex;
+    flex-direction: column;
+	width:70%;
+	height:100%;
+	@include gradient(lighten($background_color,15%),darken($background_color,15%));
+	padding:0px 10px 0px 0px;
+	overflow-y:auto;
+	overflow-x:hidden;
+	
+	.grab{
+		position:absolute;
+		top:0;
+		right:0;
+		display:block;
+		background:$dark_text_color;
+		height:100%;
+		width:10px;
+		
+		&::before,&::after{
+			content:"";
+			position:absolute;
+			top:48%;
+			height:4%;
+			width:1px;
+			background:$light_text_color;
+		}
+		&::before{
+			left:3px;
+		}
+		&::after{
+			right:3px;
+		}
+	}
+	
+	header,.header{
+		background-color:$parameters_bg;
+		.row{
+			justify-content: flex-start;
+		}
+		.icon{
+			display:inline-block;
+			width:50px;
+			height:50px;
+			font-family: 'captain-icon';
+			font-size:30px;
+			margin:10px;
+			&::before{
+				content:"\e712";
+			}
+		}
+	}
+	
+	li{
+		padding:0 20px;
 	}
 }
