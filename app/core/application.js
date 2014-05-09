@@ -7,6 +7,16 @@ var Application = new function(){
 	var onReady = [];
 
 	this.init = function(){
+		$("title").html(config.applicationName);
+		var readyFunctionsLauncher= function(){
+			for(var i in onReady){
+				var callback = onReady[i];
+				if(typeof callback === "function"){
+					callback();
+				}
+			}
+		};
+	
 		initialisationState = "LOADING";
 		var initializedModules = 0;
 		for(var i = 0; i < initSteps.length; i++){
@@ -16,16 +26,19 @@ var Application = new function(){
 					initializedModules++;
 					if(initializedModules === initSteps.length){
 						initialisationState = "FINISHED";
-						for(var i in onReady){
-							var callback = onReady[i];
-							if(typeof callback === "function"){
-								callback();
-							}
-						}
+						readyFunctionsLauncher();
 					}							
 				});
+			}else{
+				initializedModules++;
+				if(initializedModules === initSteps.length){
+					initialisationState = "FINISHED";
+					readyFunctionsLauncher();
+				}	
 			}
 		}
+		
+		
 	};
 	
 	this.ready = function(callback){

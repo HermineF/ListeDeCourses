@@ -1,22 +1,13 @@
-var Query=function(sqlStatement,args){
-	this.sqlStatement = sqlStatement;
-	if(typeof(args) === "undefined"){
-		args = [];
-	}
-	this.arguments = args;
-	this.nested = false;
-};
-	
 Application.webSql = new function(){
-	var isInitialized = false;
+	var Query=function(sqlStatement,args){
+		this.sqlStatement = sqlStatement;
+		if(typeof(args) === "undefined"){
+			args = [];
+		}
+		this.arguments = args;
+		this.nested = false;
+	};
 
-	var currentObject = this;
-	var db = openDatabase(config.database.name, "1.0", "", 5 * 1024 * 1024, dbCreationCallBack);
-	
-	if(config.isDebug){
-		dbCreationCallBack();
-	}
-		
 	function errorCallback(){
 		console.error(arguments);
 	}
@@ -64,7 +55,7 @@ Application.webSql = new function(){
 	*	Méthode permettant la création des tables de la BDD
 	*	appelle l'initialisation des données
 	*/
-	function dbCreationCallBack(){
+	function dbCreationCallBack(callback){
 		var queries = [];
 		if(!isInitialized){
 			isInitialized = true;
@@ -101,14 +92,15 @@ Application.webSql = new function(){
 			exec(queries);
 			//on rajoute d'éventuelles données
 			if(config.database.initializeDataOnCreation){
-				initializeData();
+				exec(queries);
+				initializeData(callback);
 			}else{
-				Application.onInitializationDone();
+				exec(queries,callback);
 			}
 		}
 	};
 	
-	function initializeData(){
+	function initializeData(callback){
 		var queriesList = [];
 		//on commence par vider la BDD
 		$.each(Application.Model.getModel(),function(index,model){
@@ -134,7 +126,9 @@ Application.webSql = new function(){
 			});
 		}
 		exec(queriesList,function(){
-			Application.onInitializationDone();
+			if(typeof callback === "function"){
+				callback();
+			}
 		});
 	};
 
@@ -238,6 +232,17 @@ Application.webSql = new function(){
 		});
 	};
 	
+	this.init = function(callback){
+		var isInitialized = false;
+		
+		var currentObject = this;
+		var db = openDatabase(config.database.name, "1.0", "", 5 * 1024 * 1024, function(){dbCreationCallBack(callback);});
+		
+		if(config.isDebug){
+			dbCreationCallBack(callback);
+		}
+	};
+		
 	/**
 	* Permet d'exécuter une liste de requêtes sql sous forme de transaction
 	*

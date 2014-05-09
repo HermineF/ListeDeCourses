@@ -1,0 +1,10 @@
+<ul class="lists">
+	{{#each list}}
+		<li>
+			<div class="state {{state}}"></div>
+			<div class="name">{{name}}</div>
+		</li>
+	{{else}}
+	  <p class="empty">No content</p>
+	{{/each}}
+</ul>

@@ -20,16 +20,13 @@ Application.indexedDB = new function(){
 		}
 	 
 		openRequest.onsuccess = function(e) {
-			console.log("Success");
 			db = e.target.result;
-			
 			if(typeof callback === "function"){
 				callback();
 			}
 		}
 
 		openRequest.onerror = function(e) {
-			console.error("Error");
 			console.error(e);
 		}
 	}
@@ -55,7 +52,7 @@ Application.indexedDB = new function(){
 		}
 	}
 	
-	this.select = function(modelName,options){
+	this.getModelData = function(modelName,callback){
 		var s = "";
  		db.transaction([modelName], "readonly").objectStore(modelName).openCursor().onsuccess = function(e) {
 			var cursor = e.target.result;

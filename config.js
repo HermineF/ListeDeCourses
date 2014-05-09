@@ -1,6 +1,14 @@
 var config={
 	isDebug : true,
-
+	
+	applicationName: "Liste de courses",
+	
+	version:{
+		major:0,
+		minor:0,
+		correction:0
+	},
+	
 	database:{
 		name: "ListeDeCourses",
 		initializeDataOnCreation: true
@@ -18,8 +26,16 @@ var config={
 	parameters :[
 		{"name" : "lang", "value" : "fr"},
 		{"name" : "user_name", "value" : "Nicolas", "isTemporary" : true},
-	]
+	],
 	
+	/*
+	* Les données correspondent au shéma défini dans les models
+	* ex : 
+	* 	"modelName":[
+	* 		{"ID": 1,"parameter1":"value","parameter2":"value"}, // ID est défini par défaut sur les objets il peut être défini manuellement pour permettre les références à d'autres objets
+	* 		{"parameter1":"value","parameter2":"value"}
+	* 	]
+	*/
 	initialData:{
 		"category":[
 			{"ID":1,"name":"Nourriture"},
