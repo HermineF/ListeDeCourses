@@ -14,7 +14,7 @@ var config={
 		initializeDataOnCreation: true
 	},
 	
-	/*
+	/**
 	* Les paramètres sont enregistrés automatiquement dans l'application
 	* name : nom du param (string)
 	* value : valeur du param (string)
@@ -28,7 +28,7 @@ var config={
 		{"name" : "user_name", "value" : "Nicolas", "isTemporary" : true},
 	],
 	
-	/*
+	/**
 	* Les données correspondent au shéma défini dans les models
 	* ex : 
 	* 	"modelName":[

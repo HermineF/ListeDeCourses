@@ -1,3 +1,3 @@
 Application.ready(function(){
-	$("body").html("<h1>Ready</h1>");
+	Application.Navigate("listsPage");
 });
