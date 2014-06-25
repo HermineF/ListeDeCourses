@@ -60,9 +60,10 @@ li input:checked + ul > li{
 }
 li input{
     visibility:hidden;
+    cursor:pointer;
 }
 li input::before{
-    content:"+";
+    content:"▼";
     display:inline-block;
     height:10px;
     width:10px;
@@ -76,7 +77,7 @@ li input::before{
     visibility:visible;
 }
 li input:checked::before{
-    content:"-";    
+    content:"▲";    
 }
 ul li::after{
     content:"";
