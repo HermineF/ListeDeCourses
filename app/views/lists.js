@@ -6,10 +6,17 @@ Application.View.define("lists",{
 		}
 	],
 	events : {
-		".lists li" : {
-			"click" : function(event){
+		"#content .lists li" : {
+			"click" : function(event, _self, _data){
 				$(event.target).toggleClass("selected");
-				$(".lists li" ).not(event.target).removeClass("selected");
+				$("#content .lists li" ).not(event.target).removeClass("selected");
+			}
+		},
+		"#content .lists li .name" : {
+			"click" : function(event, _self, _data){
+				if(_data){
+					_data.name += " (Clicked)";
+				}
 			}
 		},
 	},

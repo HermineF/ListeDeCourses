@@ -1,14 +1,31 @@
+/**
+* variables de configuration de l'application
+*/
 var config={
+	/**
+	* Permet de passer en mode debug
+	*/
 	isDebug : true,
 	
+	/**
+	* Nom de l'application
+	*/
 	applicationName: "Liste de courses",
 	
+	/**
+	* Numéro de version de l'application
+	*/
 	version:{
 		major:0,
 		minor:0,
 		correction:0
 	},
 	
+	/**
+	* Configuration de la base de données
+	*	name : nom de la base
+	*	initializeDataOnCreation : permet d'initialiser la base avec des données lors de sa création
+	*/
 	database:{
 		name: "ListeDeCourses",
 		initializeDataOnCreation: true
@@ -16,12 +33,12 @@ var config={
 	
 	/**
 	* Les paramètres sont enregistrés automatiquement dans l'application
-	* name : nom du param (string)
-	* value : valeur du param (string)
-	* isTemporary : défini si les données sont supprimées à la fermeture de l'application (boolean optional)
-	*
-	*	ex: {"name" : "lang", "value" : "fr", "isTemporary" : false},
-	*
+	*	name : nom du param (string)
+	*	value : valeur du param (string)
+	*	isTemporary : défini si les données sont supprimées à la fermeture de l'application (boolean optional)
+	*<example>
+	*{"name" : "lang", "value" : "fr", "isTemporary" : false},
+	*</example>
 	*/
 	parameters :[
 		{"name" : "lang", "value" : "fr"},
@@ -30,11 +47,12 @@ var config={
 	
 	/**
 	* Les données correspondent au shéma défini dans les models
-	* ex : 
-	* 	"modelName":[
-	* 		{"ID": 1,"parameter1":"value","parameter2":"value"}, // ID est défini par défaut sur les objets il peut être défini manuellement pour permettre les références à d'autres objets
-	* 		{"parameter1":"value","parameter2":"value"}
-	* 	]
+	*<example>
+	*"modelName":[
+	*	{"ID": 1,"parameter1":"value","parameter2":"value"}, // ID est défini par défaut sur les objets il peut être défini manuellement pour permettre les références à d'autres objets
+	*	{"parameter1":"value","parameter2":"value"}
+	*]
+	*</example>
 	*/
 	initialData:{
 		"category":[

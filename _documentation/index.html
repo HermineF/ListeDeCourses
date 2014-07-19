@@ -2,18 +2,48 @@
 <html>
 	<head>
 		<title>Documentation</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width">
 		<link rel="stylesheet" href="../styles/normalize.css">
 		<link rel="stylesheet" href="../styles/flexboxgrid_custom.css">
 		<link rel="stylesheet" href="documentation.css">
 		<script src="../scripts/jquery/jquery.js"></script>
-		<script src="../resources.js"></script>
-		<script src="../app/core/resources.js"></script>
 		<script src="documentation.js"></script>
 	</head>
 	<body>
 		<header>Documentation</header>
-		<section></section>
-		<main>Loading...</main>
+		<main>
+			<nav class="list">
+				<ul></ul>
+			</nav>
+			<section class="content"></section>
+		</main>
 		<footer></footer>
+		
+		<div class="overlay">
+			<div class="box">
+				<div class="circle"></div>
+				<div class="circle"></div>
+				<div class="circle"></div>
+			</div>
+			<div class="text">Loading...</div>
+		</div>
+
+		<script>
+			$("document").ready(function(){
+				//liste des resources à lire
+				var files = {
+					row : ["../config.js","../app/core/application.js","documentation.js"],
+					resourcesLoader : [ 
+						{link : "../resources.js", baseDir : "../app/"},
+						{link : "../app/core/resources.js", baseDir : "../app/core/"}
+					]
+				};
+				
+				//initialisation de la documentation
+				documentation.init(files);
+			});
+		</script>
 	</body>
 </html>

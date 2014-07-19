@@ -1,3 +1,7 @@
+/**
+* Instance de la Base de données
+* cette méthode récupère les technos disponibles et implémente automatiquement la plus adaptée
+*/
 Application.DataBase = new function(){
 	/**
 	* permet d'initialiser la base de données en fonction des technos supportées
@@ -15,7 +19,7 @@ Application.DataBase = new function(){
 		Application.DataBase.init(callback);
 	};
 	
-	/**
+	/*
 	*	Chaque base de données doit implémenter les méthodes suivantes:
 	*	
 	*	getModelData(modelName,callback);

@@ -1,8 +1,16 @@
 var resources = [
 	"logger",
+	"uid",
 	"webSql",
 	"indexedDB",
 	"database",
 	"parameters",
-	"eventHandler"
+	"bindableObject",
+	"template",
+	"view",
+	"model",
+	"store",
+	"controller",
+	"eventHandler",
+	"handlebarsHelpers"
 ];

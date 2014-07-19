@@ -1,12 +1,19 @@
+/**
+* Instance de l'application
+*/
 var Application = new function(){
 	var _application = this;
-
 	var initialisationState = "TO_START";
 	var initSteps=[
 		"DataBase",
 		"Parameters"
 	];
 	var onReady = [];
+	
+	/**
+	* Varialbe contenant le nom de la vue active
+	*/
+	this.currentViewName = "";
 	
 	this.load = function(callback){
 		var baseUrl = "app/core";
@@ -23,17 +30,22 @@ var Application = new function(){
 		addJS("resources",function(){
 			var counter = 0;
 			for(var i in resources){
-				addJS(resources[i],function(){
-					counter++;
-					if(counter == resources.length){
-						if(typeof callback === "function"){
-							callback();
+			
+				(function(i,resources){
+					addJS(resources[i],function(){
+						counter++;
+						if(counter == resources.length){
+							if(typeof callback === "function"){
+								callback();
+							}
 						}
-					}
-				});
+					});
+				})(i,resources);
+				
 			}
 		});
 	};
+	
 	this.init = function(){
 		$("title").html(config.applicationName);
 		var readyFunctionsLauncher= function(){
@@ -44,7 +56,7 @@ var Application = new function(){
 				}
 			}
 		};
-	
+		
 		initialisationState = "LOADING";
 		var initializedModules = 0;
 		for(var i = 0; i < initSteps.length; i++){
@@ -65,9 +77,17 @@ var Application = new function(){
 				}	
 			}
 		}
-		
-		
 	};	
+	
+	/**
+	* Permet de lancer des méthodes dès que l'application est initialisée.
+	* @param callback : méthode à appeler
+	*<example>
+	* Application.ready(function(){
+	*	alert("ok");
+	* });
+	*</example>
+	*/
 	this.ready = function(callback){
 		if(initialisationState !== "FINISHED"){
 			onReady.push(callback);
@@ -80,7 +100,19 @@ var Application = new function(){
 			callback();
 		}
 	}
-	
+	/**
+	*	Boolean initialisé à la création, il permet de savoir si l'application tourne sur mobile ou non.
+	*/
+	this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	/**
+	* Définition des types
+	* pour chaque type 2 méthodes sont créées: toString et parse
+	*	_ toString: converti la valeur en paramètre en chaine de caractère et renvoi le résultat
+	*	_ parse: converti la valeur en paramètre dans le type défini puis le renvoi
+	*<example>
+	*	Application.Types.number.parse("10") => 10
+	*</example>
+	*/
 	this.Types={
 		"string":{
 			"toString": function(value){return value+"";},
@@ -99,174 +131,4 @@ var Application = new function(){
 			"parse": function(value){return new Date(value);}
 		}
 	};
-	this.Model = new function(){
-		var _models={};
-		this.relationships={
-			"BELONGS_TO":"BELONGS_TO",
-			"HAS_MANY":"HAS_MANY"
-		};
-
-		this.define =  function(name,config){
-			if(typeof(_models[name]) === "undefined"){
-				_models[name] = config;
-			}else{
-				console.error("Le model "+name+" a déjà été défini",_models[name]);
-			}
-		}
-		this.getModel = function(name){
-			if(typeof(name) === "undefined"){
-				return _models;
-			}else if(typeof(_models[name]) !== "undefined"){
-				return _models[name];
-			}else{
-				throw "Le model "+name+" n'existe pas";
-			}
-		}
-	};
-	this.Store =  new function(){
-		var _stores={};
-		
-		this.define =  function(name,config){
-			if(typeof(_stores[name]) === "undefined"){
-				_stores[name] = config;
-			}else{
-				console.error("Le store "+name+" a déjà été défini",_stores[name]);
-			}
-		}
-		
-		this.getStore = function(name){
-			if(typeof(name) === "undefined"){
-				return _stores;
-			}else if(typeof(_stores[name]) !== "undefined"){
-				return _stores[name];
-			}else{
-				throw "Le store "+name+" n'existe pas";
-			}
-		}
-	};
-	this.Controller = new function(){
-		var _controllers={};
-		
-		this.define =  function(name,config){
-			if(typeof(_controllers[name]) === "undefined"){
-				_controllers[name] = config;
-			}else{
-				console.error("Le controlleur "+name+" a déjà été défini",_controllers[name]);
-			}
-		};
-		this.getController = function(name){
-			if(typeof(name) === "undefined"){
-				return _controllers;
-			}else if(typeof(_controllers[name]) !== "undefined"){
-				return _controllers[name];
-			}else{
-				throw "Le controlleur "+name+" n'existe pas";
-			}
-		};
-	};
-	this.View = new function(){
-		var _views={};
-		
-		this.define =  function(name,config){
-			if(typeof(_views[name]) === "undefined"){
-				_views[name] = config;
-			}else{
-				console.error("La vue "+name+" a déjà été défini");
-			}
-		};
-		
-		this.getView = function(name){
-			if(typeof(name) === "undefined"){
-				return _views;
-			}else if(typeof(_views[name]) !== "undefined"){
-					return _views[name];
-			}else{
-				console.error("La vue "+name+" n'existe pas");
-			}
-		}
-		
-		this.display = function(viewName){
-			for(var itemName in _views[viewName].template){
-				var item = _views[viewName].template[itemName];
-				if(typeof item === "object"){
-					if(item.view && _views[item.view]){
-						_application.View.display(item.view);
-					}else{
-						var tpl = _application.Template.getTemplate(item.name);
-						var view = Handlebars.compile(tpl);
-						var data = _views[viewName].getData();
-						var html = view(data);
-						if(typeof item.parentSelector === "undefined"){
-							item.parentSelector = "body";
-						}
-						var element = $(item.parentSelector).append(html).get(0);
-					}
-				}
-			}
-			
-			//ajout des évenements
-			var events = {};
-			for(var eventSelector in this.getView(viewName).events){
-				for(var eventType in this.getView(viewName).events[eventSelector]){
-					events[eventType] = function(event){
-						//permet d'accéder aux info de la vue depuis les méthodes des évenements
-						_self = this.getView(viewName);
-						this.getView(viewName).events[eventSelector][eventType](event, this.getView(viewName));
-					};
-					Application.EventHandler.add(viewName, eventSelector, eventType, function(event,eventData, viewName){
-						//permet d'accéder aux info de la vue depuis les méthodes des évenements
-						_self = _application.getView(viewName);
-						_application.getView(viewName).events[eventData.selector][eventData.eventType](event);
-					});
-				}
-			}
-		}
-	};	
-	this.Template = new function(){
-		var _templates = {};
-		
-		this.define =  function(name,config){
-			if(typeof(_templates[name]) === "undefined"){
-				_templates[name] = config;
-			}else{
-				console.error("Le template "+name+" a déjà été défini");
-			}
-		};
-		
-		this.getTemplate = function(name){
-			if(typeof(name) === "undefined"){
-				return _templates;
-			}else if(typeof(_templates[name]) !== "undefined"){
-					return _templates[name];
-			}else{
-				console.error("Le template "+name+" n'existe pas");
-			}
-		}
-	};
-	
-	/* Quick accessors*/
-	this.getView = function(name){
-		return _application.View.getView(name);
-	};
-	this.getModel = function(name){
-		return _application.Model.getModel(name);
-	};
-	this.getStore = function(name){
-		return _application.Store.getStore(name);
-	};
-	this.getController = function(name){
-		return _application.Controller.getController(name);
-	};
-	
-	/**
-	* Supprime le contenu de la page courante pour le remplacer par celui de la vue passée en paramètre
-	* @viewName : nom de la vue à activer
-	*/
-	this.Navigate = function(viewName){
-		$("body").html("");
-		if(this.View.getView(viewName)){
-			this.View.display(viewName);
-			Application.EventHandler.setActiveView(viewName);
-		}
-	}
 };

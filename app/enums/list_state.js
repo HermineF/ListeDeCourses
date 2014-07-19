@@ -1,5 +1,5 @@
 var LISTE_STATE={
-	"CREATING" : "CREATING",
-	"BUYING" : "BUYING",
-	"DONE" : "DONE"
+	"CREATING" : "state CREATING",
+	"BUYING" : "state BUYING",
+	"DONE" : "state DONE"
 };

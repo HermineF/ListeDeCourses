@@ -1,6 +1,7 @@
 Application.View.define("parameters",{
 	isDragging : false,
-	mousePosition : 0,
+	startPosition : 0,
+	lastPosition : 0,
 	offset : 50,
 
 	template : [
@@ -11,36 +12,45 @@ Application.View.define("parameters",{
 	],
 	events:{
 		"body" : {
-			"mousedown" : function(event){
+			"mousedown" : function(event, _self, _data){
 				var position = $("#parameters").css("left").substr(0,($("#parameters").css("left").length - 2))*1 + $("#parameters").width();
-				_self.mousePosition= event.pageX;
-				if(_self.mousePosition > position-_self.offset && _self.mousePosition< position+_self.offset ){
+				_self.startPosition= event.pageX;
+				_self.lastPosition=_self.startPosition;
+				if(_self.startPosition > position-_self.offset && _self.startPosition< position+_self.offset ){
 					_self.isDragging=true;
 				}
 			},
-			"mouseup" : function(event){
-				var snappingMargin = $("#parameters").width()/3;
-				var position = $("#parameters").css("left").substr(0,($("#parameters").css("left").length - 2))*1 + $("#parameters").width();
-				
-				if(position - $("#parameters").width() + snappingMargin > 0){
-					$("#parameters").css("left","0px");
-				}else if(position < snappingMargin){
-					$("#parameters").css("left","-"+$("#parameters").width()+"px");
-				}
-				_self.isDragging=false;
-			},
-			"mousemove" : function(event){
+			"mouseup" : function(event, _self, _data){
 				if(_self.isDragging){
-					move = event.pageX - _self.mousePosition;
-					_self.mousePosition= event.pageX;
-					var lastPosition = $("#parameters").css("left").substr(0,($("#parameters").css("left").length - 2));
-					var newPosition = lastPosition*1 + move;
-					if(newPosition < 0 && newPosition < $("#parameters").width()){
+					var snappingMargin = 50;
+					var position = $("#parameters").css("left").substr(0,($("#parameters").css("left").length - 2))*1 + $("#parameters").width();
+					
+					if(event.pageX - _self.startPosition > snappingMargin){
+						$("#parameters").css("left","0px");
+					}else if(event.pageX - _self.startPosition < -snappingMargin){
+						$("#parameters").css("left","-"+$("#parameters").width()+"px");
+					}
+					_self.isDragging=false;
+				}
+			},
+			"mousemove" : function(event, _self, _data){
+				if(_self.isDragging){
+					var lastPosition = $("#parameters").css("left").substr(0,($("#parameters").css("left").length - 2))*1;
+					move = event.pageX - _self.lastPosition;
+					_self.lastPosition = event.pageX ;
+					var newPosition = lastPosition + move;
+					if(newPosition < 0  && newPosition > -1 * $("#parameters").width()){
 						$("#parameters").css("left",newPosition+"px");
 					}
 				}
 			}
-		}
+		},
+		"#parameters li" : {
+			"click" : function(event, _self, _data){
+				$(event.target).toggleClass("selected");
+				$("#parameters .lists li" ).not(event.target).removeClass("selected");
+			}
+		}		
 	},
 	getData : function(){
 		return  {

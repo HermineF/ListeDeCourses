@@ -8,18 +8,21 @@ Application.EventHandler = new function(){
 		"ADD": "ADD",
 		"REMOVE": "REMOVE"
 	};
+	
 	/**
 	* Récupère les évènements qui ont été lancés et appel les callbacks appropriés
-	* @event : évènement lancés
-	* @eventData : données liées à l'évènement ( type, selecteur )
+	* @param event : évènement lancés
+	* @param eventData : données liées à l'évènement ( type, selecteur )
 	*/
 	var _handler = function(event,eventData){
+		//eventData.eventType = event.type;
+		
 		var doHandle = function(viewName){
 			if(typeof _events[viewName] !== "undefined" 
 					&& typeof eventData.eventType !== "undefined" 
 					&& typeof _events[viewName][eventData.eventType] !== "undefined" 
 					&& typeof eventData.selector !== "undefined" 
-					&& typeof _events[viewName][eventData.eventType][eventData.selector] !== "undefined"){
+					&& typeof _events[viewName][eventData.eventType][eventData.selector] !== "undefined"){	
 				for( var i in _events[viewName][eventData.eventType][eventData.selector]){
 					var callback = _events[viewName][eventData.eventType][eventData.selector][i].callback;
 					if(typeof callback === "function"){
@@ -37,36 +40,42 @@ Application.EventHandler = new function(){
 				var viewName = Application.getView(_currentView).template[view].view;
 				doHandle(viewName);
 			}
+			//on exécute les évenements généraux
+			//doHandle("");
 		}
 	};
 	/**
 	* ajoute ou supprime l'écoute des vues lorsqu'elles sont activées ou désactivées
-	* @viewName : nom de la vue
-	* @addOrRemoveEnum : activation (ADD) / désactivation (REMOVE) d'une vue
+	* @param viewName : nom de la vue
+	* @param addOrRemoveEnum : activation (ADD) / désactivation (REMOVE) d'une vue
 	*/
 	var _manageEvents = function(viewName,addOrRemoveEnum){
-		var functionToCall = function(e){
-			_handler(e, {selector : selector, eventType : eventType} )
-		}
-		var view = Application.getView(viewName);
-
-		if(typeof view !== "undefined"){
-			//ajout des évenèments de la vue
-			for(var selector in view.events){
-				for(var eventType in view.events[selector]){
-					//on ajoute le handler sur l'élément
-					if($(selector).length > 0){
-						if(addOrRemoveEnum === _addOrRemoveEnum.ADD){
-							$(selector).on(eventType, functionToCall);
-						}else{
-							$(selector).off(eventType, functionToCall);
-						}
+		//ajout/suppression des évenèments de la vue
+		for(var eventType in _events[viewName]){
+			for(var selector in _events[viewName][eventType]){
+			
+				var functionToCall = function(selector, eventType){
+					return function(e){
+						_handler(e, {selector : selector, eventType : eventType } );
+					};
+				}(selector, eventType);
+			
+				//on ajoute le handler sur l'élément
+				if($(selector).length > 0){
+					if(addOrRemoveEnum === _addOrRemoveEnum.ADD){
+						$(selector).on(eventType, functionToCall);
 					}else{
-						console.warn("event handler not referenced selector not found",selector);
+						$(selector).off(eventType, functionToCall);
 					}
+				}else{
+					console.warn("Event handler not referenced : selector not found",selector);
 				}
 			}
-			//ajout des évènement des vues filles
+		}
+		
+		//ajout/suppression des évènement des vues filles
+		var view = Application.getView(viewName);
+		if(typeof view !== "undefined"){
 			for(var itemName in view.template){
 				var item = view.template[itemName];
 				if(typeof item === "object"){
@@ -76,6 +85,9 @@ Application.EventHandler = new function(){
 				}
 			}
 		}
+		
+		//ajout/suppression des évènements généraux
+		//_manageEvents("", addOrRemoveEnum);
 	};
 
 	/**

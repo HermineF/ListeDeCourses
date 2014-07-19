@@ -1,7 +1,8 @@
-var launcher=new function(){
+(function(){
+	"use strict";
+	
 	var baseUrl="";
-
-	this.init=function(){
+	var init=function(){
 		function addJS(resource, callback){
 			var script = document.createElement( 'script' );
 			var link = baseUrl + "/" + resource;
@@ -51,23 +52,25 @@ var launcher=new function(){
 						//Ajout des données utilisateur
 						for(var type in resources){
 							for(var i in resources[type]){
-								counter++;
-								var url = "app/"+type+"/"+resources[type][i];
-								if(type !== "templates"){
-									addJS(url,function(){
-										totalLoaded++;
-										if(counter == totalLoaded){
-											Application.init();
-										}
-									});
-								}else{
+								if(typeof resources[type][i] === "string"){
+									counter++;
 									var url = "app/"+type+"/"+resources[type][i];
-									addHtml(resources[type][i],url,function(){
-										totalLoaded++;
-										if(counter == totalLoaded){
-											Application.init();
-										}
-									});
+									if(type !== "templates"){
+										addJS(url,function(){
+											totalLoaded++;
+											if(counter == totalLoaded){
+												Application.init();
+											}
+										});
+									}else{
+										var url = "app/"+type+"/"+resources[type][i];
+										addHtml(resources[type][i],url,function(){
+											totalLoaded++;
+											if(counter == totalLoaded){
+												Application.init();
+											}
+										});
+									}
 								}
 							}
 						}
@@ -77,5 +80,5 @@ var launcher=new function(){
 			});
 		});
 	};
-};
-launcher.init();
+	init();
+})();

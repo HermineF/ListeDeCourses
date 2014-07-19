@@ -19,10 +19,10 @@ var resources={
 		"listsPage"
 	],
 	"templates" : [
-		"header.html",
-		"footer.html",
-		"lists.html",
-		"parameters.html"
+		"header",
+		"footer",
+		"lists",
+		"parameters"
 	],
 	"controllers" : [
 		"lists"

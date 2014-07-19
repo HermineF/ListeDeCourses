@@ -1,3 +1,6 @@
+/**
+* Crée un système de requête pour l'application via WebSQL
+*/
 Application.webSql = new function(){
 	var Query=function(sqlStatement,args){
 		this.sqlStatement = sqlStatement;
@@ -246,14 +249,14 @@ Application.webSql = new function(){
 	/**
 	* Permet d'exécuter une liste de requêtes sql sous forme de transaction
 	*
-	* example:
+	* <example>
 	* database.transaction([
 	*		new Query("INSERT INTO user(firstName,lastName) values(?,?)",["archibald","smith"]),
 	*		new Query("INSERT INTO user(firstName,lastName) values(?,?)",["steve","brown"])
 	*]);
-	*
-	* @queries : liste des requêtes sql sous forme d'objets (Application.Query)
-	* @callback : fonction exécutée après la requête les résultats sont passés en paramètre sous la forme d'un tableau de résultats (index correspondant à celui des requêtes)
+	*</example>
+	* @param queries : liste des requêtes sql sous forme d'objets (Application.Query)
+	* @param callback : fonction exécutée après la requête les résultats sont passés en paramètre sous la forme d'un tableau de résultats (index correspondant à celui des requêtes)
 	*/
 	this.executeTransaction=function(queries, callback){
 		exec(queries,callback);
@@ -262,17 +265,17 @@ Application.webSql = new function(){
 	/**
 	* Permet d'exécuter une requête sql
 	*
-	* example:
+	*<example>
 	* database.query(
 	*	new Query("SELECT * from user WHERE name = ?",["steve"]),
 	*	function(results){ 
 	*		console.log(results);
 	*	}
 	* );
-	*
-	* @query : requête sql sous la forme d'un objet (Application.Query)
-	* @arguments : arguments de la requête
-	* @callback : méthode exécutée après la requête les resultats sont passés en paramètres
+	*</example>
+	* @param query : requête sql sous la forme d'un objet (Application.Query)
+	* @param arguments : arguments de la requête
+	* @param callback : méthode exécutée après la requête les resultats sont passés en paramètres
 	*/
 	this.executeQuery = function(query, callback){
 		var queries = [];

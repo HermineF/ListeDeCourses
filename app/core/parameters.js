@@ -1,3 +1,8 @@
+/**
+* Permet de créer des paramètres dasn l'applications
+*	les paramètres sont de la forme clé => valeur
+*	et peuvent être configurés pour ne pas persister entre les sessions
+*/
 Application.Parameters = new function(){
 	this.init = function(callback){
 		if(config.isDebug){

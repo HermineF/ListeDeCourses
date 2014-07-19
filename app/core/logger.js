@@ -1,4 +1,4 @@
-var Logger = (function () {
+(function () {
 	var savedConsole = console;
 	return function(debugOn,suppressAll){
 		var suppress = suppressAll || false;
@@ -20,5 +20,4 @@ var Logger = (function () {
 			console = savedConsole;
 		}
 	}
-})();
-Logger(config.isDebug);
+})(config.isDebug);
