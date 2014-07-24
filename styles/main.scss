@@ -1,4 +1,6 @@
 @import "icons.css";
+@import "font-awesome-4.1.0/css/font-awesome.min.css";
+@import "debug.scss";
 
 @font-face {
 	font-family: 'captain-icon';
@@ -291,14 +293,14 @@ header,.header{
 	color: $light_text_color;
 	
 	.pageName, h1{
-		font-size:35px;
+		font-size:1.2em;
 		font-weight:bold;
-		padding:5px 10px;
+		padding:5px;
 	}
 	.actions{
 		.button{
-			width:38px;
-			height:38px;
+			width: 40px;
+			height: 40px;
 		}
 	}
 }
@@ -462,6 +464,8 @@ main,#content{
 
 #parameters{
 	position:absolute;
+	box-sizing:border-box;
+	margin:0;
 	top:0px;
 	left:-70%;
 	display: flex;

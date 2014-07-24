@@ -63,9 +63,9 @@ Application.EventHandler = new function(){
 				//on ajoute le handler sur l'élément
 				if($(selector).length > 0){
 					if(addOrRemoveEnum === _addOrRemoveEnum.ADD){
-						$(selector).on(eventType, functionToCall);
+						$(document).on(eventType, selector, functionToCall);
 					}else{
-						$(selector).off(eventType, functionToCall);
+						$(document).off(eventType, selector, functionToCall);
 					}
 				}else{
 					console.warn("Event handler not referenced : selector not found",selector);
@@ -96,7 +96,7 @@ Application.EventHandler = new function(){
 	this.setActiveView = function(viewName){
 		//on supprime les évènements des vues active
 		if(_currentView){
-			_manageEvents(_currentView, _addOrRemoveEnum.REMOVE);
+			//_manageEvents(_currentView, _addOrRemoveEnum.REMOVE);
 		}
 		//on change la vue
 		_currentView = viewName;

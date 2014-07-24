@@ -5,6 +5,14 @@ Application.View = new function(){
 	var _views={};
 	
 	/**
+	*	Element html parent par défaut pour l'ajout de vue (si aucun élément parent n'est défini ce sera celui-ci qui sera utilisé)
+	*/
+	this.defaultParentSelector = "body";
+	if(config.isDebug && !Application.isMobile){
+		this.defaultParentSelector = ".app-device-screen";
+	}
+	
+	/**
 	* Défini une nouvelle vue de l'application (gestion automatique par l'application)
 	*@param name : nom de la vue
 	*@param config : configuration de la vue
@@ -47,8 +55,8 @@ Application.View = new function(){
 						var view = Handlebars.compile(tpl);
 						var data = _views[viewName].getData();
 						var html = view(data);
-						if(typeof item.parentSelector === "undefined"){
-							item.parentSelector = "body";
+						if(typeof item.parentSelector === "undefined" ||  item.parentSelector === ""){
+							item.parentSelector = this.defaultParentSelector;
 						}
 						var element = $(html);
 						$(item.parentSelector).append(element);
@@ -79,7 +87,6 @@ Application.View = new function(){
 				(function(view, eventSelector, eventType){
 					Application.EventHandler.add(viewName, eventSelector, eventType, function(event,eventData, viewName){
 						(function(_self, _data){
-							console.log("Data", _data, event.target, Handlebars.getBoundData(event.target));
 							_self.events[eventData.selector][eventData.eventType](event, _self, _data);
 						})(view, Handlebars.getBoundData(event.target));
 					});
@@ -93,6 +100,7 @@ Application.View = new function(){
 	* @param viewName : nom de la vue à raffraichir
 	*/
 	this.refresh = function(viewName){
+	console.log("refreshed");
 		if(typeof viewName === "undefined"){
 			viewName = Application.currentViewName;
 		}
@@ -134,6 +142,7 @@ Application.getView = function(name){
 */
 Application.Navigate = function(viewName,animation){
 	if( typeof animation === "undefined"){
+		$(this.defaultParentSelector).html("");
 		$("body").html("");
 		if(Application.View.getView(viewName)){
 			Application.View.display(viewName);

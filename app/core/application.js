@@ -11,6 +11,11 @@ var Application = new function(){
 	var onReady = [];
 	
 	/**
+	* Template du sytème de debug
+	*/
+	this.debugTemplate = null;
+	
+	/**
 	* Varialbe contenant le nom de la vue active
 	*/
 	this.currentViewName = "";
@@ -48,6 +53,27 @@ var Application = new function(){
 	
 	this.init = function(){
 		$("title").html(config.applicationName);
+		
+		//si on est en mode débug on ajoute les éléments de controle de debug
+		if(config.isDebug && !Application.isMobile){
+			$("head").append("<link rel='stylesheet' href='styles/debug.css'>");
+			var link = "./app/core/debug/template/debug.html";
+			$.ajax( link )
+			.done(function(result) {
+				Application.debugTemplate = result;
+				var html = $("body").html();
+				$("body").html(result);
+				$(".app-device-screen").html(html);
+				
+				$("head").append("<script src='app/core/debug/js/debug.js' async></script>");
+			})
+			.fail(function() {
+				// en cas d'échec on ajoute la classe 'app-device-screen' au body pour éviter des problèmes de fonctionnement
+				$("body").addClass("app-device-screen");
+				throw "Impossible de charger le mode debug";
+			});
+		}
+
 		var readyFunctionsLauncher= function(){
 			for(var i in onReady){
 				var callback = onReady[i];
@@ -100,6 +126,7 @@ var Application = new function(){
 			callback();
 		}
 	}
+	
 	/**
 	*	Boolean initialisé à la création, il permet de savoir si l'application tourne sur mobile ou non.
 	*/

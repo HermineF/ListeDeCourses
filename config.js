@@ -1,5 +1,7 @@
 /**
 * variables de configuration de l'application
+*	pour le bon fonctionnement de l'application ne pas supprimer completement les paramètres de base:
+*		isDebug, applicationName, version, database, parameters, initialData
 */
 var config={
 	/**
@@ -14,6 +16,9 @@ var config={
 	
 	/**
 	* Numéro de version de l'application
+	*	<ul><li>major : modification majeur de l'application (pas de rétrocompatibilité)</li>
+	*	<li>minor : modification mineur de l'application (rétrocompatibilité)</li>
+	*	<li>correction : correction de bugs dans l'application (pas d'évolution</li></ul>
 	*/
 	version:{
 		major:0,

@@ -1,0 +1,350 @@
+$app-device-color: #000;
+$app-device-border:#191919;
+$app-grey-light: #3d3d3d;
+$app-grey: #191919;
+$app-active: #FFF;
+$app-screen:#141414;
+$app-blue:#0084a5;
+
+.app-sound{
+    position:relative;
+    display:block;
+	visibility:hidden;
+    width:5cm;
+    height:1cm;
+    line-height:1cm;
+    background-color:$app-device-color;
+    border-radius:0.25cm;
+    margin:0 auto;
+    color:$app-grey-light;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	
+    .app-sound-icon{
+        font-size:0.75cm;
+        display:inline-block;
+        width:1cm;
+        height:1cm;
+        text-align:center;
+    }
+    .app-sound-bar{
+        display:inline-block;
+        width:3cm;
+        height:0.15cm;
+        position:absolute;
+        top:0.4cm;
+        right:0.5cm;
+        border-radius:0.25cm;
+        background-color:$app-grey-light;
+        overflow:hidden;
+        
+        .app-sound-bar-value{
+            height:100%;
+            margin:0;
+            padding:0;
+            background-color:$app-blue;
+			border-radius:0.25cm;
+			box-shadow:0.1cm 0cm 0.1cm lighten($app-blue,20%);
+        }
+        
+    }
+
+}
+.app-view-switch{
+	position:absolute;
+    display:inline-block;
+	background-color:$app-device-color;
+    border-radius:0.25cm;
+    color:$app-grey-light;
+	height:1.2cm;
+    line-height:1.1cm;
+	top:10px;
+	right: 10px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.app-toolbar{
+	position:absolute;
+    display:block;
+	background-color:$app-device-color;
+    border-radius:0.25cm;
+    color:$app-grey-light;
+	width:1.2cm;
+	padding:0.25cm 0;
+	text-align:center;
+    line-height:1cm;
+	top:10px;
+	left: 10px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.app-button{
+	display:inline-block;
+	position:relative;
+	width:1cm;
+	height:1cm;
+	border-radius:0.25cm;
+	background-color: lighten($app-device-color,10%);
+	margin:0.1cm;
+	text-align:center;
+	cursor:pointer;
+	&.app-active, &:active{
+		color:$app-active;
+		background-color: lighten($app-device-color,20%);
+	}
+}
+.fa-database{
+	-webkit-transform:rotate(90deg);
+}
+
+.app-battery-icon{
+	color:#00FF00;
+}
+.app-battery-critical{
+	color:#FF0000;
+}
+.app-battery-low{
+	color:#FF4000;
+}
+.app-end-call-button .fa::after,.app-connexion-off-button .fa::after{
+	content:"/";
+	position:absolute;
+	font-weight:bold;
+	width:100%;
+	height:100%;
+	text-align:center;
+	font-size:100%;
+	line-height:100%;
+	left:0;
+	text-shadow: 1px 1px 0px lighten($app-device-color,10%),-1px -1px 0px lighten($app-device-color,10%);
+}
+.app-end-call-button.app-active .fa::after,.app-connexion-off-button.app-active .fa::after{
+	text-shadow: 1px 1px 0px lighten($app-device-color,20%),-1px -1px 0px lighten($app-device-color,20%);
+}
+
+input[type='range']{
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	outline: none;
+	border-radius: 0.15cm;
+	background-color: $app-grey;
+	height: 0.15cm;
+	width: 3cm;
+	vertical-align: middle;
+}
+input[type='range'].vertical{
+	writing-mode: bt-lr;
+	-webkit-appearance: slider-vertical;
+	width: 0.15cm;
+	height:3cm;
+}
+input[type='range']::-webkit-slider-thumb{
+	 -webkit-appearance: none !important;
+	 -moz-appearance: none;
+	 border-radius: 0.5cm;
+	 background-color: #FFF;
+	 border: 1px solid #999;
+	 height: 0.5cm;
+	 width: 0.5cm;
+}
+.app-battery-level{
+	display:inline-block;
+	width:1cm;
+	height:3cm;
+}
+
+.app-device{
+    box-shadow:0.5cm 0.5cm 0.5cm 0.5cm rgba(0,0,0,0.2), inset 0 -3cm 0.5cm 0cm lighten($app-device-color,5%);
+    color:$app-grey-light;
+    padding:0;
+	box-sizing: border-box;
+    margin:0.2cm auto;
+    position:relative;
+    height:12.25cm;
+    width:6.25cm;
+    text-align:center;
+    border-radius:0.8cm;
+    display:block;
+    background-color : $app-device-color;
+	border:0.1cm solid $app-device-border;
+	border-top:0.15cm solid $app-device-border;
+	border-bottom:0.25cm solid $app-device-border;
+    background: -moz-linear-gradient(top,  $app-device-color 29%, $app-device-color 29%, lighten($app-device-color,10%) 37%, lighten($app-device-color,20%) 48%, $app-device-color 68%, $app-device-color 68%, $app-device-color 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(29%,$app-device-color), color-stop(29%,$app-device-color), color-stop(37%,lighten($app-device-color,10%)), color-stop(48%,lighten($app-device-color,20%)), color-stop(68%,$app-device-color), color-stop(68%,$app-device-color), color-stop(100%,$app-device-color));
+    background: -webkit-linear-gradient(top,  $app-device-color 29%,$app-device-color 29%,lighten($app-device-color,10%) 37%,lighten($app-device-color,20%) 48%,$app-device-color 68%,$app-device-color 68%,$app-device-color 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  $app-device-color 29%,$app-device-color 29%,lighten($app-device-color,10%) 37%,lighten($app-device-color,20%) 48%,$app-device-color 68%,$app-device-color 68%,$app-device-color 100%);
+    background: -ms-linear-gradient(top,  $app-device-color 29%,$app-device-color 29%,lighten($app-device-color,10%) 37%,lighten($app-device-color,20%) 48%,$app-device-color 68%,$app-device-color 68%,$app-device-color 100%);
+    background: linear-gradient(to bottom,  $app-device-color 29%,$app-device-color 29%,lighten($app-device-color,10%) 37%,lighten($app-device-color,20%) 48%,$app-device-color 68%,$app-device-color 68%,$app-device-color 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$app-device-color', endColorstr='$app-device-color',GradientType=0 );
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	
+	
+	&.horizontal{
+		-webkit-transform: rotate(-90deg);
+		box-shadow:-0.5cm 0.5cm 0.5cm 0.5cm rgba(0,0,0,0.2), inset 0 -3cm 0.5cm 0cm lighten($app-device-color,5%);
+		
+		.app-device-screen-container{
+			-webkit-transform: rotate(90deg);
+			width: 8.9cm;
+			height: 5.25cm;
+			margin: 2.5cm -1.40cm;
+		}
+		
+		 .app-device-sound-up-button, .app-device-sound-down-button{
+			-webkit-transform: rotate(-90deg);
+		}
+	}
+
+    .app-device-speaker{
+        display:block;
+        margin: 0.5cm auto 1cm auto;
+        border-radius:0.1cm;
+        background-color:$app-grey;
+        width:2cm;
+        height:0.1cm;
+    }
+    .app-device-camera{
+        display:block;
+        position:absolute;
+        width:0.05cm;
+        height:0.05cm;
+        background-color:#000;
+        border-radius:100%;
+        top:0.425cm;
+        right:1.25cm;
+        border:0.15cm solid $app-grey;
+    }
+    .app-device-on-off-button{
+        display:block;
+        position:absolute;
+        width:0.75cm;
+        height:0.05cm;
+        background-color:$app-device-color;
+        top:-0.18cm;
+        right:2cm;
+        border-top-left-radius:0.1cm;
+        border-top-right-radius:0.1cm;
+        
+        .app-device-on-button{
+            display:block;
+            position:absolute;
+            width:1cm;
+            height:1cm;
+            line-height:1cm;
+            border-radius: 0.25cm;
+            border:1px solid $app-grey;
+            cursor:pointer;
+            top:-1.25cm;
+            left:-0.15cm;
+            &:active{
+                color:$app-active;
+                background-color:$app-device-color;
+            }
+        }
+    }
+    .app-device-sound-buttons{
+        display:block;
+        position:absolute;
+        height:2cm;
+        width:0.1cm;
+        background-color:$app-device-color;
+        top:2.25cm;
+        left:-0.18cm;
+        border-top-left-radius:0.1cm;
+        border-bottom-left-radius:0.1cm;
+        
+        .app-device-sound-up-button, .app-device-sound-down-button{
+            display:block;
+            position:absolute;
+            width:1cm;
+            height:1cm;
+            line-height:1cm;
+            border-radius: 0.25cm;
+            border:1px solid $app-grey;
+            cursor:pointer;
+            &:active{
+                color:$app-active;
+                background-color:$app-device-color;
+            }
+        }
+        .app-device-sound-up-button{
+            top:-0.25cm;
+            left:-1.5cm;
+        }
+        .app-device-sound-down-button{
+            bottom:-0.25cm;
+            left:-1.5cm;
+        }
+    }
+    .app-device-screen-container{
+		position:relative;
+        display:block;
+        background-color:$app-screen;
+        width:5.25cm;
+        height:8.9cm;
+        margin:0 auto;
+		overflow:hidden;
+		.app-device-screen{
+			-webkit-transform: scale(.5);
+			top: -50%;
+			left: -50%;
+			position: relative;
+		}
+    }
+	.app-device-screen{
+		height: 100%;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		overflow:hidden;
+		width: 200%;
+		height: 200%;
+	}
+	
+    .app-device-toolbar{
+        width:100%;
+        height:0.5cm;
+        margin:0.5cm auto;
+        display: flex;
+        justify-content: space-around;
+        margin:0.3cm auto 0 auto;
+        padding:0;
+        
+        .app-device-back-button,.app-device-home-button,.app-device-menu-button{
+            display:inline-block;
+            height:0.5cm;
+            width:0.5cm;  
+            cursor:pointer;
+            &:active{
+                color:$app-active;
+            }
+        }
+    }
+}
+.app-events{
+    display:inline-block;
+	visibility:hidden;
+    height:1cm;
+    line-height:1cm;
+    background-color:$app-device-color;
+    border-radius:0.25cm;
+    margin:0 auto;
+    color:$app-grey-light;
+}

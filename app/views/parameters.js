@@ -11,6 +11,16 @@ Application.View.define("parameters",{
 		}
 	],
 	events:{
+		document: {
+			"menubutton" : function(event, _self, _data){
+				var position = $("#parameters").css("left").substr(0,($("#parameters").css("left").length - 2))*1;
+				if($("#parameters").css("left") != 0){
+					$("#parameters").css("left","0px");
+				}else{
+					$("#parameters").css("left","-"+$("#parameters").width()+"px");
+				}
+			}
+		},
 		"body" : {
 			"mousedown" : function(event, _self, _data){
 				var position = $("#parameters").css("left").substr(0,($("#parameters").css("left").length - 2))*1 + $("#parameters").width();
