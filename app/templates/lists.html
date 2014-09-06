@@ -1,11 +1,15 @@
 <main id="content">
+{{#if lists.length}}
 	<ul class="lists">
 			{{#each lists}}
-				<li>
+				<li {{bind-attr class=selected }}>
 					<div {{bind-attr class=state}}></div>
 					<div class="name">{{bind name}}</div>
 					<div class="button next icon-286"></div>
 				</li>
 			{{/each}}
 	</ul>
+{{else}}
+	<div class="grab">Vous n'avez créé aucune liste</div>
+{{/if}}
 </main>

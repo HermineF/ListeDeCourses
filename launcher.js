@@ -2,83 +2,96 @@
 	"use strict";
 	
 	var baseUrl="";
-	var init=function(){
-		function addJS(resource, callback){
-			var script = document.createElement( 'script' );
-			var link = baseUrl + "/" + resource;
-			var patt = /\.js/gi;
-			if(!patt.test(link)){
-				//on ajoute l'extension .js si nécéssaire
-				link = link + ".js";
-			}
-			script.src = link;
-			var element = document.getElementsByTagName("body")[0].appendChild(script);
-			$(element).load(function(){
-				if(typeof callback === "function"){
-					callback();
-				}
-			});
+
+	var addJS = function(resource, callback){
+		var link = baseUrl + "/" + resource;
+		var patt = /\.js/gi;
+		if(!patt.test(link)){
+			//on ajoute l'extension .js si nécéssaire
+			link = link + ".js";
 		}
-		function addHtml(name,resource, callback){
-			var link = baseUrl + "/" + resource;
-			var patt = /\.html/gi;
-			if(!patt.test(link)){
-				//on ajoute l'extension .html si nécéssaire
-				link = link + ".html";
+		$.ajax({
+			url:link,
+			success:function(){
+				if(typeof callback === "function"){
+					setTimeout(callback,100);
+				}
+			},
+			dataType:'script',
+			error: function(xhr, textStatus, errorThrown) {
+				console.error("Exception thrown while loading application's resources : ",link,xhr,textStatus,errorThrown);
 			}
-			$.ajax( link )
-			.done(function(result) {
-				Application.Template.define(name,result);
-				if(typeof callback === "function"){
-					callback();
-				}
-			})
-			.fail(function() {
-				if(typeof callback === "function"){
-					callback();
-				}
-				throw "La vue "+name+" n'existe pas";
-			});
+		});
+	};
+		
+	var addHtml = function(name,resource, callback){
+		var link = baseUrl + "/" + resource;
+		var patt = /\.html/gi;
+		if(!patt.test(link)){
+			//on ajoute l'extension .html si nécéssaire
+			link = link + ".html";
 		}
+		$.ajax( link )
+		.done(function(result) {
+			Application.Template.define(name,result);
+			if(typeof callback === "function"){
+				callback();
+			}
+		})
+		.fail(function() {
+			if(typeof callback === "function"){
+				callback();
+			}
+			throw "La vue "+name+" n'existe pas ("+resource+")";
+		});
+	}
 	
-		var counter = 0;
-		var totalLoaded = 0;
-		$(document).ready(function(){
-			addJS("config");
-			addJS("app/core/application",function(){
-				Application.load(function(){
-					addJS("resources",function(){
+	$(document).ready(function(){
+		addJS("config");
+		addJS("app/core/application",function(){
+			Application.ready(function(){
+				addJS("resources",function(){
+					//Ajout des données utilisateur
+					var resourcesTypes = [];
+					for(var i in resources){
+						resourcesTypes.push(i);
+					}
+					var typeIndex = 0;
+					var index = 0;
 					
-						//Ajout des données utilisateur
-						for(var type in resources){
-							for(var i in resources[type]){
-								if(typeof resources[type][i] === "string"){
-									counter++;
-									var url = "app/"+type+"/"+resources[type][i];
-									if(type !== "templates"){
-										addJS(url,function(){
-											totalLoaded++;
-											if(counter == totalLoaded){
-												Application.init();
-											}
-										});
-									}else{
-										var url = "app/"+type+"/"+resources[type][i];
-										addHtml(resources[type][i],url,function(){
-											totalLoaded++;
-											if(counter == totalLoaded){
-												Application.init();
-											}
-										});
-									}
+					var addNextResource= function(){
+						if(typeIndex < resourcesTypes.length){
+							var category = resourcesTypes[typeIndex];
+							var resourceCategory = resources[category];
+							
+							if(index >= resourceCategory.length){
+								index = 0;
+								typeIndex++;
+								addNextResource();
+							}else{
+								var url = "app/"+category+"/"+resourceCategory[index];
+								if(category !== "templates"){
+									addJS(url, function(){
+										index++;
+										addNextResource();
+									});
+								}else{
+									var url = "app/"+category+"/"+resourceCategory[index];
+									addHtml(resourceCategory[index],url, function(){
+										index++;
+										addNextResource();
+									});
 								}
 							}
+						}else{
+							addJS("main");
 						}
-						addJS("main");
-					});
+					};
+					
+					addNextResource();
+					
 				});
 			});
 		});
-	};
-	init();
+	});
 })();

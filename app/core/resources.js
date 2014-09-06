@@ -1,6 +1,7 @@
 var resources = [
 	"logger",
 	"uid",
+	"data",
 	"webSql",
 	"indexedDB",
 	"database",

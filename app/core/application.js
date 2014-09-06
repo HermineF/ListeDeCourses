@@ -4,10 +4,7 @@
 var Application = new function(){
 	var _application = this;
 	var initialisationState = "TO_START";
-	var initSteps=[
-		"DataBase",
-		"Parameters"
-	];
+
 	var onReady = [];
 	
 	/**
@@ -16,22 +13,32 @@ var Application = new function(){
 	this.debugTemplate = null;
 	
 	/**
-	* Varialbe contenant le nom de la vue active
+	* Variable contenant le nom de la vue active
 	*/
 	this.currentViewName = "";
 	
-	this.load = function(callback){
+	/**
+	*	Permet de charger l'ensemble des fonctionalités du core de l'application
+	*/
+	var load = function(callback){
 		var baseUrl = "app/core";
-		function addJS(resource, callback){
-			var script = document.createElement( 'script' );
-			script.src = baseUrl+"/"+resource+".js";
-			var element = document.getElementsByTagName("body")[0].appendChild(script);
-			$(element).load(function(){
-				if(typeof callback === "function"){
-					callback();
+		
+		var addJS = function (resource, callback){
+			var src = baseUrl+"/"+resource+".js";
+			$.ajax({
+				url:src,
+				success:function(){
+					if(typeof callback === "function"){
+						callback();
+					}
+				},
+				dataType:'script',
+				error: function(xhr, textStatus, errorThrown) {
+					console.error("Exception thrown while loading application's resources : ",textStatus,errorThrown);
 				}
 			});
-		}
+		};
+		
 		addJS("resources",function(){
 			var counter = 0;
 			for(var i in resources){
@@ -51,58 +58,51 @@ var Application = new function(){
 		});
 	};
 	
-	this.init = function(){
+	/**
+	* Méthode d'initialisation de l'application
+	*/
+	var init = function(){
 		$("title").html(config.applicationName);
-		
-		//si on est en mode débug on ajoute les éléments de controle de debug
-		if(config.isDebug && !Application.isMobile){
-			$("head").append("<link rel='stylesheet' href='styles/debug.css'>");
-			var link = "./app/core/debug/template/debug.html";
-			$.ajax( link )
-			.done(function(result) {
-				Application.debugTemplate = result;
-				var html = $("body").html();
-				$("body").html(result);
-				$(".app-device-screen").html(html);
-				
-				$("head").append("<script src='app/core/debug/js/debug.js' async></script>");
-			})
-			.fail(function() {
-				// en cas d'échec on ajoute la classe 'app-device-screen' au body pour éviter des problèmes de fonctionnement
-				$("body").addClass("app-device-screen");
-				throw "Impossible de charger le mode debug";
-			});
-		}
 
 		var readyFunctionsLauncher= function(){
-			for(var i in onReady){
-				var callback = onReady[i];
-				if(typeof callback === "function"){
-					callback();
+			setTimeout(function(){
+				for(var i in onReady){
+					var callback = onReady[i];
+					if(typeof callback === "function"){
+						callback();
+					}
 				}
-			}
+				
+				//si on est en mode débug on ajoute les éléments de controle de debug
+				if(config.isDebug && !Application.isMobile){
+					$("head").append("<link rel='stylesheet' href='styles/debug.css'>");
+					var link = "./app/core/debug/template/debug.html";
+					$.ajax(link)
+					.done(function(result) {
+						Application.debugTemplate = result;
+						$("body").find("script").each(function(){
+							$(this).appendTo("html");
+						});
+						var html = $("body").html();
+						
+						$("body").html(result);
+						$(".app-device-screen").html(html);
+						
+						$("head").append("<script src='app/core/debug/js/debug.js' async></script>");
+					})
+					.fail(function() {
+						// en cas d'échec on ajoute la classe 'app-device-screen' au body pour éviter des problèmes de fonctionnement
+						$("body").addClass("app-device-screen");
+						throw "Impossible de charger le mode debug";
+					});
+				}
+			},50);
 		};
 		
-		initialisationState = "LOADING";
-		var initializedModules = 0;
-		for(var i = 0; i < initSteps.length; i++){
-			var step = initSteps[i];
-			if(Application[step] && typeof Application[step].init === "function"){
-				Application[step].init(function(){
-					initializedModules++;
-					if(initializedModules === initSteps.length){
-						initialisationState = "FINISHED";
-						readyFunctionsLauncher();
-					}							
-				});
-			}else{
-				initializedModules++;
-				if(initializedModules === initSteps.length){
-					initialisationState = "FINISHED";
-					readyFunctionsLauncher();
-				}	
-			}
-		}
+		load(function(){
+			initialisationState = "FINISHED";
+			readyFunctionsLauncher();
+		});
 	};	
 	
 	/**
@@ -119,7 +119,8 @@ var Application = new function(){
 			onReady.push(callback);
 			
 			if(initialisationState === "TO_START"){
-				Application.init();
+				initialisationState = "LOADING";
+				init();
 			}
 			
 		}else if(typeof callback === "function"){
@@ -158,4 +159,5 @@ var Application = new function(){
 			"parse": function(value){return new Date(value);}
 		}
 	};
+
 };

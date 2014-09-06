@@ -3,7 +3,9 @@
 		<h1>{{pageName}}</h1>
 		<div class="actions">
 			{{#each actions}}
+				{{#if isActive}}
 				<div class="button {{name}}"></div>
+				{{/if}}
 			{{/each}}
 		</div>
 	</div>

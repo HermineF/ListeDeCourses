@@ -9,6 +9,8 @@ Application.EventHandler = new function(){
 		"REMOVE": "REMOVE"
 	};
 	
+	var generalViewName = "__null__";
+	
 	/**
 	* Récupère les évènements qui ont été lancés et appel les callbacks appropriés
 	* @param event : évènement lancés
@@ -41,9 +43,10 @@ Application.EventHandler = new function(){
 				doHandle(viewName);
 			}
 			//on exécute les évenements généraux
-			//doHandle("");
+			doHandle(generalViewName);
 		}
 	};
+	
 	/**
 	* ajoute ou supprime l'écoute des vues lorsqu'elles sont activées ou désactivées
 	* @param viewName : nom de la vue
@@ -61,33 +64,50 @@ Application.EventHandler = new function(){
 				}(selector, eventType);
 			
 				//on ajoute le handler sur l'élément
-				if($(selector).length > 0){
-					if(addOrRemoveEnum === _addOrRemoveEnum.ADD){
-						$(document).on(eventType, selector, functionToCall);
-					}else{
-						$(document).off(eventType, selector, functionToCall);
+				try{
+					if(selector === "document"){
+						selector = document;
+					}else if(selector === "window"){
+						selector = window;
 					}
-				}else{
-					console.warn("Event handler not referenced : selector not found",selector);
+					if($(selector).length > 0){
+						if(selector === "document"){
+							$(document).on(eventType, document, functionToCall);
+						}else if(selector === "window"){
+							$(window).on(eventType, window, functionToCall);
+						}else{
+							if(addOrRemoveEnum === _addOrRemoveEnum.ADD){
+								$(document).on(eventType, selector, functionToCall);
+							}else{
+								$(document).off(eventType, selector, functionToCall);
+							}
+						}
+					}else{
+						console.warn("Event handler not referenced : selector not found",selector);
+					}
+				}catch(e){
+					console.warn("Event handler Exception on : ",selector);
 				}
 			}
 		}
 		
 		//ajout/suppression des évènement des vues filles
-		var view = Application.getView(viewName);
-		if(typeof view !== "undefined"){
-			for(var itemName in view.template){
-				var item = view.template[itemName];
-				if(typeof item === "object"){
-					if(item.view && Application.getView(item.view)){
-						_manageEvents(item.view, addOrRemoveEnum);
+		if(viewName !== generalViewName){
+			var view = Application.getView(viewName);
+			if(typeof view !== "undefined"){
+				for(var itemName in view.template){
+					var item = view.template[itemName];
+					if(typeof item === "object"){
+						if(item.view && Application.getView(item.view)){
+							_manageEvents(item.view, addOrRemoveEnum);
+						}
 					}
 				}
 			}
-		}
 		
-		//ajout/suppression des évènements généraux
-		//_manageEvents("", addOrRemoveEnum);
+			//ajout/suppression des évènements généraux
+			_manageEvents(generalViewName, addOrRemoveEnum);
+		}
 	};
 
 	/**
@@ -107,7 +127,18 @@ Application.EventHandler = new function(){
 	* Permet d'ajouter un évènement
 	*/
 	this.add = function(viewName, selector, eventType, callback){
+		if(selector === document){
+			selector = "document";
+		}else if(selector === window){
+			selector = "window";
+		}
+	
 		var event = {selector : selector, eventType : eventType, callback : callback};
+		
+		if(viewName === null){
+			viewName = generalViewName;
+		}
+		
 		if(typeof _events[viewName] === "undefined"){
 			_events[viewName] = {};
 		}
@@ -121,11 +152,16 @@ Application.EventHandler = new function(){
 		_events[viewName][eventType][selector].push(event);
 		return event;
 	};
+	
 	/**
 	* Permet de supprimer un évènement
 	*/
 	this.remove = function(viewName, selector, eventType, callback){
 		try{
+			if(viewName === null){
+				viewName = generalViewName;
+			}
+		
 			for(var i in _events[viewName][eventType][selector]){
 				if(_events[viewName][eventType][selector][i].callback === callback){
 					_events[viewName][eventType][selector].splice(i,1);

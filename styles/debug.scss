@@ -1,3 +1,4 @@
+$app-background-color: #FFF;
 $app-device-color: #000;
 $app-device-border:#191919;
 $app-grey-light: #3d3d3d;
@@ -29,7 +30,7 @@ $app-blue:#0084a5;
         display:inline-block;
         width:1cm;
         height:1cm;
-        text-align:center;
+        padding-left:0.3cm;
     }
     .app-sound-bar{
         display:inline-block;
@@ -40,7 +41,6 @@ $app-blue:#0084a5;
         right:0.5cm;
         border-radius:0.25cm;
         background-color:$app-grey-light;
-        overflow:hidden;
         
         .app-sound-bar-value{
             height:100%;
@@ -48,7 +48,31 @@ $app-blue:#0084a5;
             padding:0;
             background-color:$app-blue;
 			border-radius:0.25cm;
-			box-shadow:0.1cm 0cm 0.1cm lighten($app-blue,20%);
+			position:relative;
+			
+			&::before{
+				content: "";
+				display: block;
+				width: 0.5cm;
+				height: 0.5cm;
+				border-radius: 50%;
+				background-color: #00add8;
+				position: absolute;
+				top: -0.175cm;
+				right: -0.15cm;
+				opacity:0.7;
+			}
+			&::after{
+				content:"";
+				display:block;
+				width:0.2cm;
+				height:0.2cm;
+				border-radius:50%;
+				background-color:lighten($app-blue,10%);
+				position:absolute;
+				top:-0.025cm;
+				right:0cm;
+			}
         }
         
     }
@@ -166,7 +190,7 @@ input[type='range']::-webkit-slider-thumb{
 }
 
 .app-device{
-    box-shadow:0.5cm 0.5cm 0.5cm 0.5cm rgba(0,0,0,0.2), inset 0 -3cm 0.5cm 0cm lighten($app-device-color,5%);
+    box-shadow:0.25cm 0.25cm 0.5cm 0.5cm rgba(0,0,0,0.2), inset 0 -3cm 0.5cm 0cm lighten($app-device-color,5%);
     color:$app-grey-light;
     padding:0;
 	box-sizing: border-box;
@@ -273,6 +297,7 @@ input[type='range']::-webkit-slider-thumb{
         .app-device-sound-up-button, .app-device-sound-down-button{
             display:block;
             position:absolute;
+			background-color: $app-background-color;
             width:1cm;
             height:1cm;
             line-height:1cm;
@@ -296,7 +321,14 @@ input[type='range']::-webkit-slider-thumb{
     .app-device-screen-container{
 		position:relative;
         display:block;
-        background-color:$app-screen;
+		background: $app-screen;
+		background: -moz-linear-gradient(-45deg,  lighten($app-screen,10%) 0%, darken($app-screen,10%) 85%);
+		background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, lighten($app-screen,10%)), color-stop(85%,darken($app-screen,10%)));
+		background: -webkit-linear-gradient(-45deg,  lighten($app-screen,10%) 0%,darken($app-screen,10%) 85%);
+		background: -o-linear-gradient(-45deg,   lighten($app-screen,10%) 0%,darken($app-screen,10%) 85%);
+		background: -ms-linear-gradient(-45deg,  lighten($app-screen,10%) 0%,darken($app-screen,10%) 85%);
+		background: linear-gradient(135deg,   lighten($app-screen,10%) 0%,darken($app-screen,10%) 85%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=' lighten($app-screen,10%)', endColorstr='darken($app-screen,10%)',GradientType=1 );
         width:5.25cm;
         height:8.9cm;
         margin:0 auto;

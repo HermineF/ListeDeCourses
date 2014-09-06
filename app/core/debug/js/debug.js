@@ -62,8 +62,13 @@ $(document).ready(function(){
 		triggerEvent("searchbutton",this);
 	});
 	$(document).on("click",".app-device-sound-up-button",function(){
+		$(".app-sound-icon .fa").removeClass("fa-volume-off").addClass("fa-volume-down");
 		if(volume<100){
 			volume += 10;
+		}
+		if(volume===100){
+			$(".app-sound-icon .fa").removeClass("fa-volume-down");
+			$(".app-sound-icon .fa").addClass("fa-volume-up");
 		}
 		$(".app-sound-bar-value").css("width",volume+"%");
 		$(".app-sound").css("visibility","visible");
@@ -77,8 +82,13 @@ $(document).ready(function(){
 		triggerEvent("volumeupbutton",this);
 	});
 	$(document).on("click",".app-device-sound-down-button",function(){
+		$(".app-sound-icon .fa").removeClass("fa-volume-up").addClass("fa-volume-down");
 		if(volume>0){
 			volume -= 10;
+		}
+		if(volume===0){
+			$(".app-sound-icon .fa").removeClass("fa-volume-down");
+			$(".app-sound-icon .fa").addClass("fa-volume-off");
 		}
 		$(".app-sound-bar-value").css("width",volume+"%");
 		$(".app-sound").css("visibility","visible");

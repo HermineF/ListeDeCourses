@@ -7,7 +7,8 @@ Application.View = new function(){
 	/**
 	*	Element html parent par défaut pour l'ajout de vue (si aucun élément parent n'est défini ce sera celui-ci qui sera utilisé)
 	*/
-	this.defaultParentSelector = "body";
+	this.defaultParentSelector = config.isDebug && !Application.isMobile ? ".app-device-screen" : "body";
+	
 	if(config.isDebug && !Application.isMobile){
 		this.defaultParentSelector = ".app-device-screen";
 	}
@@ -20,6 +21,10 @@ Application.View = new function(){
 	this.define =  function(name,config){
 		if(typeof(_views[name]) === "undefined"){
 			_views[name] = config;
+			Application.Data.addView(name);
+			if(Application.getView(name).init){
+				Application.getView(name).init();
+			}
 		}else{
 			console.error("La vue "+name+" a déjà été défini");
 		}
@@ -44,19 +49,31 @@ Application.View = new function(){
 	*@param viewName : nom de la vue à afficher
 	*/
 	this.display = function(viewName){
+		if(Application.getView(viewName).onLoad){
+			Application.getView(viewName).onLoad();
+		}
+		
 		for(var itemName in _views[viewName].template){
 			var item = _views[viewName].template[itemName];
 			if(typeof item === "object"){
 				if(item.view && _views[item.view]){
 					Application.View.display(item.view);
 				}else{
-					var tpl = Application.Template.getTemplate(item.name);
+					var tpl = null;
+					if(item.tpl){
+						tpl = item.tpl;
+					}else{
+						tpl = Application.Template.getTemplate(item.name);
+					}
+					
 					if(tpl){
 						var view = Handlebars.compile(tpl);
-						var data = _views[viewName].getData();
+						var data = Application.Data.getData(viewName);
 						var html = view(data);
 						if(typeof item.parentSelector === "undefined" ||  item.parentSelector === ""){
 							item.parentSelector = this.defaultParentSelector;
+						}else if(item.parentSelector === "body"){
+							item.parentSelector = this.defaultParentSelector
 						}
 						var element = $(html);
 						$(item.parentSelector).append(element);
@@ -71,7 +88,7 @@ Application.View = new function(){
 							}
 							var data = Handlebars.getBoundData(event.target);
 							console.log("Data Changed : ",value, data);
-							
+							data = value;
 							// TODO mettre à jour la valeur de la donnée
 							
 						});
@@ -100,31 +117,32 @@ Application.View = new function(){
 	* @param viewName : nom de la vue à raffraichir
 	*/
 	this.refresh = function(viewName){
-	console.log("refreshed");
 		if(typeof viewName === "undefined"){
 			viewName = Application.currentViewName;
 		}
-		
-		var element = $("[data-view-name="+viewName+"]");
-		var html = "";
-		
-		for(var itemName in _views[viewName].template){
-			var item = _views[viewName].template[itemName];
-			if(typeof item === "object"){
-				if(item.view && _views[item.view]){
-					Application.View.refresh(item.view);
-				}else{
-					var tpl = Application.Template.getTemplate(item.name);
-					if(tpl){
-						var view = Handlebars.compile(tpl);
-						var data = _views[viewName].getData();
-						html += view(data);
+		if(typeof viewName !== "undefined" && viewName !== ""){
+			var element = $("[data-view-name="+viewName+"]");
+			var html = "";
+			
+			for(var itemName in _views[viewName].template){
+				var item = _views[viewName].template[itemName];
+				if(typeof item === "object"){
+					if(item.view && _views[item.view]){
+						Application.View.refresh(item.view);
+					}else{
+						var tpl = Application.Template.getTemplate(item.name);
+						if(tpl){
+							var view = Handlebars.compile(tpl);
+							var data = Application.Data.getData(viewName);
+							html += view(data);
+						}
 					}
 				}
 			}
+			var newElement = $(html);
+			newElement.attr("data-view-name",viewName);
+			element.replaceWith(newElement);
 		}
-		element.replaceWith(html);
-		element.attr("data-view-name",viewName);
 	}
 };
 
@@ -140,14 +158,11 @@ Application.getView = function(name){
 * Supprime le contenu de la page courante pour le remplacer par celui de la vue passée en paramètre
 * @param viewName : nom de la vue à activer
 */
-Application.Navigate = function(viewName,animation){
-	if( typeof animation === "undefined"){
-		$(this.defaultParentSelector).html("");
-		$("body").html("");
-		if(Application.View.getView(viewName)){
-			Application.View.display(viewName);
-			Application.EventHandler.setActiveView(viewName);
-			Application.currentViewName = viewName;
-		}
+Application.Navigate = function(viewName){
+	$(Application.View.defaultParentSelector).html("");
+	if(Application.View.getView(viewName)){
+		Application.View.display(viewName);
+		Application.EventHandler.setActiveView(viewName);
+		Application.currentViewName = viewName;
 	}
 };

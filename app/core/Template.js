@@ -3,6 +3,7 @@ Application.Template = new function(){
 	
 	this.define =  function(name,config){
 		if(typeof(_templates[name]) === "undefined"){
+			config = config.replace(/({{#each[^}]*}}[^<]*)<(.*)>/i, "$1 <$2 {{bind-attr data-id=_uid}}>");
 			_templates[name] = config;
 		}else{
 			console.error("Le template "+name+" a déjà été défini");

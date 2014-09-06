@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Test</title>
+		<meta name="viewport" content="width=device-width">
+		
+		<link rel="stylesheet" href="styles/normalize.css">
+		<link rel="stylesheet" href="styles/flexboxgrid_custom.css">
+		<!--<link rel="stylesheet" href="styles/main.css">-->
+		
+		<script src="scripts/jquery/jquery.js"></script>
+		<script src="scripts/handlebars/handlebars-v1.3.0.js"></script>
+		
+		<!-- Application elements -->
+		
+		<script>var Application = {};</script>
+		<script src="app/core/uid.js"></script>
+		<script src="app/core/bindableObject.js"></script>
+		<script src="app/core/handlebarsHelpers.js"></script>
+		
+		<!-- /Application elements -->
+
+		<script>
+			$(document).ready(function(){
+				var data=new Application.BindableObject({
+					lists:[
+						{name:"test1"},
+						{name:"test2"},
+						{name:"test3"},
+						{name:"test4"}
+					]
+				});
+			
+				var source   = $("#test-template").html();
+				source = source.replace(/({{#each[^}]*}}[^<]*)<(.*)>/i, "$1 <$2 {{bind-attr data-id=_uid}}>");
+				
+				var template = Handlebars.compile(source);
+				var html = template(data);
+			
+				$("#content").html(html);
+				
+			});
+			
+		</script>
+	</head>
+	<body>
+	
+<!-- TEMPLATES -->
+	
+		<script id="test-template" type="text/x-handlebars-template">
+		
+				<ul class="lists">
+						{{#each lists}}
+							<li>
+								<div class="name">{{name}}</div>
+							</li>
+						{{/each}}
+				</ul>
+			
+		</script>
+<!-- /TEMPLATES -->
+	
+		<div id="content"></div>
+	</body>
+</html>

@@ -201,6 +201,7 @@ body {
     width: 100%;
 	display: flex;
     flex-direction: column;
+	overflow: hidden;
 	
     background: $background_color;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -284,6 +285,10 @@ ul{
 			background:$shadow;
 		}
 	}
+}
+.grab{
+	height: 100%;
+	padding-top: 1cm;
 }
 
 /* HEADERS*/

@@ -10,15 +10,13 @@ Application.View.define("header",{
 		
 	},
 	
-	getData : function(){
-		return  {
-			pageName : "Listes",
-			actions : [
-				{name : "add"},
-				{name : "edit"},
-				{name : "remove"}
-			]
-		};
+	data : {
+		pageName : "unset",
+		actions : {
+			 "add" : {name : "add", isActive : true},
+			"edit" : {name : "edit", isActive : false},
+			"remove" : {name : "remove", isActive : false}
+		}
 	}
 });
 	

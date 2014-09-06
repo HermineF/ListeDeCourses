@@ -16,11 +16,9 @@ Application.View.define("listsPage",{
 		}
 	],
 	
-	init : function(){
-		
+	onLoad : function(){
+		Application.Data.getData("header").pageName = "Listes";
 	},
-	
-	getData : function(){
-	}
+
 });
 	
